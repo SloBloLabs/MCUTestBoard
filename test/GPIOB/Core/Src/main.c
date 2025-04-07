@@ -99,27 +99,26 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  uint8_t cnt = 0;
+  int cnt = 0;
+  int step = 1;
   while (1)
   {
 	  // Reset GPIOB
 	  GPIOB->BSRR = 0xffff << 16;
       // Set pin according to cnt
 	  GPIOB->BSRR = (1 << cnt);
-	  cnt++;
-	  //after all pins were high, flash them all 5 times
-	  if(cnt > 16) {
-		  for(uint8_t i = 0; i < 10; ++i) {
-			  if(i%2 == 0) {
-				  GPIOB->BSRR = 0xffff << 16;
-			  } else {
-				  GPIOB->BSRR = 0xffff;
-			  }
-			  LL_mDelay(100);
-		  }
-		  cnt = 0;
+
+	  cnt += step;
+
+	  if(cnt > 14) {
+		  step = -1;
 	  }
-	  LL_mDelay(100);
+	  else if(cnt < 1) {
+		  step = 1;
+	  }
+
+	  LL_mDelay(20);
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
